@@ -1,0 +1,143 @@
+/* Copyright (c) 2019. Xiaolong Xu, ZhejiangLab.
+ * Date: 2020.04.09
+ * Note: 协议中的枚举类型
+ */
+syntax = "proto3";
+package vts.protocol.main;
+
+option java_multiple_files = true;
+option java_package = "com.zhejianglab.vts.protocol.main";
+
+// 消息类型,数据包中类型为uint16
+enum MsgType {
+	MT_INVALID = 0;
+	MT_REGISTER = 1;
+	MT_LOGIN = 2;
+	MT_LOGOUT = 3;
+	MT_ACCOUNT_RESULT = 4;
+	MT_TRY_TEST = 5;
+	MT_TRY_REPLAY = 6;
+	MT_TRY_RESULT = 7;
+	MT_SESSIONINFO = 8;
+	MT_FETCH_SESSION_TEST_RESULT = 9;
+	MT_SESSION_TEST_RESULT = 10;
+	MT_DEBUG_SESSION = 11;
+	MT_DEBUG_SESSION_RESULT = 12;
+	MT_ACTOR_PREPARE = 13;
+	MT_ACTOR_PREPARE_RESULT = 14;
+	MT_QUERY_ARCHIVEINFO = 15;
+	MT_ARCHIVEINFO_LIST = 16;
+	MT_SUBROLE = 17;
+	MT_SUBROLE_RESULT = 18;
+	MT_PUBROLE = 19;
+	MT_NOTIFY = 20;
+}
+
+// 角色容器类型
+enum RoleContainerType {
+	RCT_INVALID = 0;
+	RCT_CONSOLE = 1; //前端控制器
+	RCT_TESTEE = 2; //被测车
+	RCT_OBSERVER = 3; //观察器
+	RCT_DRIVE_SIMULATOR = 4; // 驾驶模拟器
+	RCT_PARTICIPANT_VEHICLE = 5; //机动车陪练端
+	RCT_PARTICIPANT_UNMOTORIZED_VEHICLE = 6; //非机动车陪练端
+	RCT_PARTICIPANT_HUMAN = 7; //行人陪练端
+	RCT_PARTICIPANT_ANIMAL = 8; //动物陪练端
+	RCT_PARTICIPANT_ENV = 9; //环境控制器
+	//ADD 2020-07-10
+	RCT_EVALUATION = 10; //测试评价端
+}
+
+// Account操作类型
+enum AccountOPType {
+	AOT_INVALID = 0;
+	AOT_REGISTER = 1;
+	AOT_LOGIN = 2;
+	AOT_LOGOUT = 3;
+}
+
+// Notify类型
+enum NotifyType {
+	NT_INVALID = 0;
+	NT_START_TEST = 1;
+	NT_ABORT_TEST = 2;
+	NT_PAUSE_TEST = 3;
+	NT_RESUME_TEST = 4;
+	NT_STEP_TEST = 5;
+	NT_FINISH_TEST = 6;
+	NT_COLLIDE_ROLE = 7;
+	NT_DESTROY_ROLE = 8;
+	//ADD 2020-07-10
+	NT_CROSS_SOLID_LINE = 9; //跨（压）实线
+	NT_CROSS_DOTTED_LINE = 10; //跨（压）虚线
+	NT_EXCEED_SPEED = 11; //超速
+	NT_DRIVE_REVERSED = 12; //逆行
+	NT_DEVIATE_DRIVING_AREA = 13; //偏离可行区域
+	NT_DRIVE_RED_LIGHT = 14; //闯红灯
+	NT_DRIVE_LOW_SPEED = 15; //低速行驶
+	NT_WRONG_TURN_SIGNAL = 16; //未正确开启转向灯
+	NT_SCORE_CHANGE = 17;//主控车分数变化
+	NT_ARRIVED_ROLE = 18;//主控车到达终点
+	NT_ROLLED = 19;//车辆翻滚
+	NT_RISK_COLLIDE = 20;//存在碰撞风险
+}
+
+// Archive类型
+enum ArchiveType {
+	AT_INVALID = 0;
+	AT_TEST_CASE = 1; //测试案例
+	AT_MAP = 2; //地图
+	AT_TEST_RESULT = 3; //测试结果
+	AT_TEST_RECORD = 4; //测试记录
+}
+
+// Role角色类型
+enum RoleType {
+	RT_INVALID = 0;
+	RT_TREE = 1;
+	RT_GRASS = 2;
+	RT_SHRUB = 3;
+	RT_LAMP = 4;
+	RT_OUTDOOR = 5;
+	RT_TRASHBIN = 6;
+	RT_HYDRANT = 7;
+	RT_DISTRIBUTIONBOX = 8;
+	RT_PAVEMENT = 9;
+	RT_MAILBOX = 10;
+	RT_UTILITYPOLE = 11;
+	RT_UTILITYTOWER = 12;
+	RT_BUILDING = 13;
+	RT_WALL = 14;
+	RT_STATICSIGN = 15;
+	RT_DYNAMICSIGN = 16;
+	RT_TRAFFICLIGHT = 17;
+	RT_DISPLAY = 18;
+	RT_BARRIERGATE = 19;
+	RT_BUMP = 20;
+	RT_CONE = 21;
+	RT_BARRIER = 22;
+	RT_CAMERA = 23;
+	RT_VELOCIMETER = 24;
+	RT_FLASH = 25;
+	RT_ROCK = 26;
+	RT_HOLE = 27;
+	RT_GULLYHOLE = 28;
+	RT_MANHOLE = 29;
+	RT_COIL = 30;
+	RT_PUDDLE  = 31;
+	RT_CRACK = 32;
+	RT_SWELL = 33;
+	RT_TRASH = 34;
+	RT_LEAVES = 35;
+	RT_OTHER = 36;
+	RT_MOTORVEHICLE = 37;
+	RT_EMERGENCY = 38;
+	RT_TRAIN = 39;
+	RT_COMBINATIONVEHICLE = 40;
+	RT_NONMOTORVEHICLE = 41;
+	RT_PEDESTRIAN = 42;
+	RT_ANIMAL = 43;
+	RT_CLOUD = 44;
+	RT_RAIN = 45;
+}

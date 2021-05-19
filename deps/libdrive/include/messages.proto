@@ -1,0 +1,163 @@
+/* Copyright (c) 2019. Xiaolong Xu, ZhejiangLab.
+ * Date: 2020.03.24
+ * Note: protobuf协议定义
+ *		 下列消息在网络传输时，如无特殊说明，均使用TCP协议传输
+ */
+syntax = "proto3";
+import "fields.proto";
+import "enums.proto";
+
+package vts.protocol.main;
+
+option java_multiple_files = true;
+option java_package = "com.zhejianglab.vts.protocol.main";
+
+//------------------------------ 身份账号相关 -------------------------
+// 注册
+message Register {
+	string account = 1;
+	string password = 2;
+}
+
+// 登录
+message Login {
+	string account = 1;
+	string password = 2;
+	RoleContainerType type = 3;
+}
+
+// 登出
+message Logout {
+	string reason = 1;  // 登出原因
+}
+
+// 账号操作结果
+message AccountResult {
+	AccountOPType op = 1;
+	bool result = 2;
+	string version = 3;
+	string reason = 4;
+}
+
+//----------------------------- 测试流程相关 -----------------------------
+// 尝试测试
+message TryTest {
+	string case_file_id = 1; //测试案例编号
+}
+
+// 尝试回放
+message TryReplay {
+	string test_record_id = 1; //测试记录编号
+}
+
+// 尝试结果
+message TryResult {
+	string session_id = 1;
+	bool result = 2;
+	int32 progress = 3;
+	int32 wait_second = 4;  // 单位:秒
+	string reason = 5;
+	oneof archive_id {
+		string case_file_id = 6; //测试案例编号
+		string test_record_id = 7; //测试记录编号
+	}
+}
+
+// Session信息
+message SessionInfo {
+	SimHeader header = 1;
+	string session_id = 2;
+	float percent = 3;
+	int64 session_time = 4;
+	repeated RoleContainerInfo clients = 5;
+}
+
+// 请求Session测试结果信息
+message FetchSessionTestResult {
+	string session_id = 1;
+}
+
+// Session测试结果信息
+message SessionTestResult {
+	SimHeader header = 1;
+	string session_id = 2;
+	string test_record_id = 3;
+	string result_url = 4;
+}
+
+// Session Debug参数设置
+message DebugSession {
+	string session_id = 1;
+	repeated uint32 params = 2;
+}
+
+// Session Debug参数设置结果
+message DebugSessionResult {
+	string session_id = 1;
+	bool result = 2;
+	string reason = 3;
+}
+
+// 客户端准备测试
+message ActorPrepare {
+	string session_id = 1;
+	string actor_id = 2;
+	ArchiveInfo archive_info = 3;
+}
+
+// 客户端准备结果
+message ActorPrepareResult {
+	string session_id = 1;
+	string actor_id = 2;
+	bool result = 3;
+	string reason = 4;
+}
+
+//---------------------------------- 数据文件相关 -------------------------------
+// 获取存档信息
+message QueryArchiveInfo {
+	//ADD 2020-07-10
+	ArchiveType type = 1;  //存档类型
+	//其他可选条件，json格式
+	string condition = 2;
+}
+
+// 存档信息列表
+message ArchiveInfoList {
+	repeated ArchiveInfo archive_info_list = 1;
+}
+
+//---------------------------------- Role相关 ---------------------------------
+// 订阅交通角色数据消息
+message SubRole {
+	string session_id = 1;
+	repeated string role_types = 2;
+	repeated string role_ids = 3;
+	repeated AOIInfo role_AOIs = 4;
+}
+
+// 订阅操作的结果
+message SubRoleResult {
+	bool result = 1;
+	string reason = 2;
+	string session_id = 3;
+}
+
+// 发布交通数据消息，使用UDP传输
+message PubRole {
+	SimHeader header = 1;
+	string session_id = 2;
+	repeated SingleRole s_roles = 3;
+	repeated CompoundRole c_roles = 4;
+}
+
+//---------------------------------- 通用 ---------------------------------------
+// 事件
+message Notify {
+	SimHeader header = 1;
+	string session_id = 2;
+	string role_id = 3;
+	NotifyType type = 4;
+	string s_param = 5;
+	repeated double d_param = 6;
+}

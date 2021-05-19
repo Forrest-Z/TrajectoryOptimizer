@@ -1,0 +1,5 @@
+[E][20210519-14:01:13.474][UDPMulticastReceiver.cpp:57]:join group error , no : 19 msg : No such device
+[E][20210519-14:01:13.474][UDPMulticastReceiver.cpp:149]:receiver error, no : 125, msg : Operation aborted.
+[I][20210519-14:01:13.474][BaseServer.cpp:27]:NetServer::call_err_handler err_type : 125, err_msg : Operation aborted.
+[I][20210519-14:01:13.474][ChannelManager.cpp:34]:create_channel end, result : start channel error, channel_name : heartbeat
+[I][20210519-14:01:13.474][UDPMulticastReceiver.cpp:18]:destroy MulticastReceiver

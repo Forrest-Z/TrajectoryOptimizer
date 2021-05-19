@@ -1,0 +1,53 @@
+syntax = "proto3";
+package vts.protocol.chassis;
+
+enum MsgType
+{
+    VEHICLE_REGISTER=0;
+    VEHICLE_UNREGISTER=1;
+    VEHICLE_CONTROL=2;
+    VEHICLE_FEEDBACK=3;
+}
+
+//自动驾驶状态机
+enum DrivingMode
+{
+    OFF = 0;                      //智驾关闭状态(预留)
+    MANUAL = 1;
+    AUTONOMOUS_DRIVING = 2;       //智驾激活状态
+    FAULT = 3;                    //异常状态
+}
+
+enum VehicleError
+{
+    OK=0;
+    VEHICLE_REGISTERED = 1;
+    TESTCASE_NOT_READY = 2;
+    NO_MAP_FILE_FOUND = 3;
+}
+
+//steering
+enum SteeringControlMode
+{
+    TARGET_STEERING_ANGLE_MODE = 0;//for AD test
+    ACTUAL_STEERING_ANGLE_MODE = 1;//for driving simulator
+}
+
+enum GearControlMode
+{
+    AUTOMATIC_GEAR_MODE=0;//自动挡
+    MANUAL_GEAR_MODE=1;//手动挡模式
+}
+
+// driving
+enum DrivingControlMode
+{
+    TARGET_ACCELERATOR_PEDAL_MODE= 0; //for AD test
+    ACTUAL_ACCELERATOR_PEDAL_MODE= 1; //for driving simulator
+}
+
+enum BrakeControlMode
+{
+    TARGET_BRAKE_PEDAL_MODE=0;//for AD test
+    ACTUAL_BRAKE_PEDAL_MODE=1;//for driving simulator
+}

@@ -1,0 +1,153 @@
+syntax = "proto3";
+package vts.protocol.chassis;
+
+import "chassis_enums.proto";
+import "fields.proto";
+
+message SteeringControl
+{
+    oneof cmd_value
+    {
+        float target_steering_wheel_angle=1;//rad, for AD test
+        float actual_steering_wheel_angle=2;//rad, for driving simulator
+        float target_steering_wheel_torque=3;//Nm, reserved
+        float target_directive_wheel_angle=4;//rad, reserved
+    }
+};
+
+message SteeringFeedback
+{
+    float steering_wheel_angle = 1;
+    float steering_wheel_speed = 2;
+    float left_directive_wheel_angle = 3;
+    float right_directive_wheel_angle = 4;
+}
+
+message GearControl
+{
+    GearControlMode gear_mode=1;
+    int32 target_gear_position=2; //正值为前进挡，0为空挡，-5～-1为倒车档， -6为P档
+    bool parking = 3; //Hand brake state,0-release，1-up
+    float clutch_pedal_angle = 4;
+};
+
+message GearFeedback
+{
+    GearControlMode gear_mode=1;
+    int32 current_gear_position=2;
+    bool hand_brake = 3; //Hand brake state,0-release，1-up
+};
+
+message DrivingControl
+{
+    oneof cmd_value
+    {
+        float target_accelerator_pedal_position = 1;//0-100.0, for AD test
+        float actual_accelerator_pedal_position = 2;//0-100.0, for driving simulator
+    }
+    GearControl gear_control=7;
+}
+
+message DrivingFeedback
+{
+    DrivingMode driving_Mode = 1;
+    float accelerator_pedal_position=2; // 油门踏板物理位置，如果为智驾状态，该值为虚拟踏板位置
+    float engine_rpm = 3;
+};
+
+message BrakeControl
+{
+    oneof cmd_value
+    {
+        float target_brake_pedal_position=1;//for AD test
+        float actual_brake_pedal_position=2;//for driving simulator
+    }
+};
+
+message BrakeFeedback
+{
+    DrivingMode driving_mode = 1;
+    float brake_pedal_position=2;// 制动踏板物理位置，如果为智驾状态，该值为虚拟踏板位置
+};
+
+message BodyControlModule
+{
+    bool left_turn_light = 1;//0-关闭，1-开启，下同
+    bool right_turn_light = 2;
+    bool low_beam = 3;
+    bool high_beam = 4;
+    bool front_fog_light = 5;
+    bool rear_fog_light = 6;
+    bool hazard_warning_light = 7;
+    int32 wiper =8;//档位模式1-3
+    bool horn = 9;
+    bool auto_beam = 10;
+    bool auto_wiper = 11;
+    bool end_outline_marker_lamps = 12;
+};
+
+message BodyControlModuleFeedback
+{
+    float longitudinal_acceleration=1;
+    float vehicle_speed=2;
+    float front_left_wheel_speed=3;
+    float fron_right_wheel_speed=4;
+    float rear_left_wheel_speed=5;
+    float rear_right_wheel_speed=6;
+
+    bool left_turn_light_state = 7;//0-关闭，1-开启，下同
+    bool right_turn_light_state = 8;
+    bool low_beam_state = 9;
+    bool high_beam_state = 10;
+    bool front_fog_light_state = 11;
+    bool rear_fog_light_state = 12;
+    bool hazard_warnning_light_state = 13;
+    int32 wiper_state =14;//档位模式1-3
+    bool horn_state = 15;
+    bool auto_beam_state = 16;
+    bool auto_wiper_state = 17;
+    bool brake_light_state = 18;
+    bool end_outline_marker_lamps_state = 19;
+    bool stop_lamps_state = 20;
+    bool reversing_lamps_state = 21;
+
+    float front_left_door_angle = 22;//0.0 - closed state, 下同
+    float front_right_door_angle = 23;
+    float rear_left_door_angle = 24;
+    float rear_right_door_angle = 25;
+    float vehicle_boot_angle = 26;//行李箱状态
+    float vehicle_bonnet_angle = 27;//引擎盖状态
+};
+
+message VehicleControl
+{
+    vts.protocol.main.SimHeader header=1;
+    SteeringControl steering_control=2;
+    DrivingControl driving_control=3;
+    BrakeControl brake_control=4;
+    BodyControlModule bcm=5;
+};
+
+message VehicleFeedback
+{
+    vts.protocol.main.SimHeader header=1;
+    VehicleError error = 2;
+    SteeringFeedback steering_feedback=3;
+    DrivingFeedback driving_feedback=4;
+    BrakeFeedback brake_feedback=5;
+    GearFeedback gear_feedback=6;
+    BodyControlModuleFeedback bcm_feedback=7;
+};
+
+message VehicleRegister
+{
+    vts.protocol.main.SimHeader header=1;
+    SteeringControlMode steering_control_mode = 2;
+    DrivingControlMode driving_control_mode = 3;
+    BrakeControlMode brake_mode=4;
+}
+
+message VehicleQuit
+{
+    vts.protocol.main.SimHeader header=1;
+}

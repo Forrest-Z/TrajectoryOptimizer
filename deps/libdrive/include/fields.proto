@@ -1,0 +1,109 @@
+/* Copyright (c) 2019. vts, ZhejiangLab.
+ * Date: 2020.07.10
+ * Note: 协议中的公共字段
+ */
+syntax = "proto3";
+package vts.protocol.main;
+import "enums.proto";
+
+option java_multiple_files = true;
+option java_package = "com.zhejianglab.vts.protocol.main";
+
+// 仿真测试消息头
+message SimHeader {
+	int64 send_ts = 1;  // 单位:毫秒
+	int64 sim_ts = 2;   // 单位:毫秒
+	//ADD 2020-07-10
+	int64 seq_no = 3;  // 消息序列号，同类消息自增，从0开始，可用于判断是否丢包
+}
+
+//------------------------------- Role信息 ------------------------
+// AOI 信息
+message AOIInfo {
+	string role_id = 1;
+	float aoi_radius = 2;  // 单位:米
+}
+
+// 三维向量信息：双精度浮点型取值
+message Vector3d {
+	double x = 1;  // x轴方向取值
+	double y = 2;  // y轴方向取值
+	double z = 3;  // z轴方向取值
+}
+
+// 位置信息，另一种坐标系
+message RLSL {
+	string road_id = 1;
+	int32 lane_id = 2;
+	double s = 3;  // 单位:米
+	double l = 4;  // 单位:米
+	double z = 5;  // 单位:米
+}
+
+// 四维向量信息：单精度浮点型取值
+message QuaternionF {
+	float x = 1;
+	float y = 2;
+	float z = 3;
+	float w = 4;
+}
+
+// 三维向量信息：单精度浮点型取值
+message Vector3f {
+	float x = 1;  // x轴方向取值
+	float y = 2;  // y轴方向取值
+	float z = 3;  // z轴方向取值
+}
+
+// 碰撞体信息
+message ColliderBox {
+	Vector3d bottom_center = 1;  // 碰撞体的底部中心点位置，单位：米
+	Vector3f size = 2; // 碰撞体尺寸，单位：米
+	QuaternionF rotation = 3;  // 角度：单位：弧度
+}
+
+// 角色信息
+message SingleRole {
+	string id = 1;  // 角色ID
+	string name = 2;  // 角色名称
+	RoleType type = 3;  // 角色类型
+	string subtype = 4; // 角色子类型
+	//ADD 2020-07-10
+	ColliderBox box = 5; // 碰撞体信息
+	RLSL rlsl = 6; // 碰撞体所在的道路位置信息
+	Vector3f linear_speed = 7;  // 线速度：相对于UTM坐标系，单位：米/秒
+	Vector3f angular_speed = 8;  // 角速度：相对于UTM坐标系，单位：弧度/秒
+	Vector3f linear_acceleration = 9; // 线加速度
+	Vector3f angular_acceleration = 10; // 角加速度
+	repeated float f_status = 11; //浮点型状态集合，参见《通讯协议-角色状态数据取值说明.xlsx》
+	repeated string s_status = 12; //字符串型状态集合，参见《通讯协议-角色状态数据取值说明.xlsx》
+	int64 report_ts = 13;  // 上报时间，单位:毫秒
+}
+
+// 组合型角色信息
+message CompoundRole {
+	string id = 1;  // 角色ID
+	RoleType type = 2;  // 角色类型
+	string subtype = 3; // 角色子类型
+	repeated SingleRole single_roles = 4;  // 子组件角色信息
+}
+
+//------------------------------- 数据相关 --------------------------
+// 存档信息
+message ArchiveInfo {
+	string id = 1;  // 文件ID
+	string url = 2;  // 下载链接
+	ArchiveType type = 3;  // 存档类型
+	int64 modify_ts = 4;  // 最新修改时间，单位:毫秒
+	//ADD 2020-07-10
+	string meta_data = 5; // 存档内容描述
+}
+
+// 角色容器数量信息
+message RoleContainerInfo {
+	RoleContainerType type = 1;  // 角色容器类型
+	uint32 role_num = 2;  // 该客户端下正在运行的角色数量
+	string address = 3;  // 地址信息
+	bool is_alive = 4;  // 是否掉线
+	int64 last_alive_ts = 5;  // 最近在线时间戳，单位:毫秒
+}
